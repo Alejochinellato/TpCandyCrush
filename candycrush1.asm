@@ -37,6 +37,11 @@ LD R2, salto		 ; salto entre filas de caramelos
 ADD R0,R0,R2		 ; mueve R0 a la siguiente fila de caramelos
 ADD R4,R4, #-1		 ; decrementa el contador de filas (8)
 BRp LOOP_CANDY		 
+
+LD R6,negro
+ST R6, contador1
+ST R6, contador2
+
 BRnzp MAIN			 ; finaliza el bucle y salta a MAIN
 
 
@@ -50,7 +55,7 @@ ST R6, SAVEE_R6
 ST R2, SAVEE_R2
 ;R0 posicion caramelo
 ;R1 color
-LD R3, linea		; salto entre lineas = 114 (128 - 14)
+LD R3, linea2		; salto entre lineas = 114 (128 - 14)
 LD R4, gris			; color gris de fondo
 LD R5, ancho		; ancho del caramelo gris (14)
 LD R6, candy		; lo que suma para ir a la posicion del caramelos (258 = 128 + 128 + 2)
@@ -157,6 +162,7 @@ verde     	.FILL x03E0
 gris     	.FILL x4210
 white   	.FILL x7FFF
 azul    	.FILL x001F
+negro		.FILL x0000
 rosa	.FILL x3466
 amarillo .FILL x7FE0
 SAVEE_R0 	.BLKW 1
@@ -166,22 +172,28 @@ E 	.BLKW 1
 SAVEE_R5 	.BLKW 1   
 SAVEE_R6 	.BLKW 1      	 
 SAVEE_R7 	.BLKW 1
-
+contador1 	.BLKW 1
+contador2 	.BLKW 1
+salto .FILL x710
+linea2       	.FILL #114  
 
 ; seccion principal del programa
 MAIN
 
-LD R2, start_seleccion		; inicio seleccion (xC100)
-ESPERALETRA
-LDI R5,WAITKB				; carga la direccion de espera de entrada 
-BRzp ESPERALETRA			; si no hay tecla presionada, vuelve a esperar
-	
-LD R5,SAVEE_R5
+LD R2, start_seleccion       ; inicio seleccion (xC100)
 
-LDI R4,TECLADO				; carga la direccion del teclado en R4
-LD R3, letraDneg			; carga la letra D (-100)
-ADD R4 ,R4, R3				; suma R3 a R4 para verificar si es la entrada
-BRz DERECHA					; si se detecta la entrada de direccion a la derecha (osea que la resta da 0), salta a DERECHA
+ESPERALETRA
+LDI R5, WAITKB               ; carga el estado del teclado
+BRz ESPERALETRA              ; si no hay tecla presionada, vuelve a esperar
+LD R5, SAVEE_R5              ; continúa si se presionó una tecla
+
+LDI R4, TECLADO              ; carga la dirección del teclado en R4
+LD R3, letraDneg             ; carga la letra D (-100)
+ADD R4, R4, R3               ; suma R3 a R4 para verificar si es la entrada
+BRz DERECHA                  ; si la resta da 0, salta a DERECHA
+
+; El resto del código sigue igual...
+
 
 LD R3, letraDpos			; carga la letra D positiva (100)
 ADD R4 ,R4, R3				; suma R3 a R4 para volver al valor original de la letra ingresada
@@ -215,6 +227,12 @@ BRnzp ESPERALETRA			; si no hay teclas validas, vuelve a esperar
 
 ; movimiento a la Derecha
 DERECHA	
+LD R6,contador1
+ST R6,contador1
+ADD R6,R6,#-7
+BRz ESPERALETRA
+ADD R6,R6,#8
+ST R6,contador1
 ADD R5,R5,#-1			; resta uno ya que R5 funciona como flag (si es 0 esta en enter para poder cambiar el caramelo de lugar sino es la seleccion normal)
 BRz INTERCAMBIAR_DER	; si R5 es cero, salta a INTERCAMBIAR_DER
 JSR BORRAR				; llama a BORRAR para limpiar la seleccion con el color negro
@@ -224,8 +242,14 @@ JSR SELECCION			; llama a SELECCION para actualizar la seleccion en la nueva pos
 BRnzp ESPERALETRA		; salta a ESPERALETRA para esperar la proxima entrada
 
 
+
 ; movimiento a la Izquierda (que funciona igual que derecha pero resta 16 a la pocision)
 IZQUIERDA
+LD R6,contador1
+ADD R6,R6,#0
+BRz ESPERALETRA
+ADD R6,R6,#-1
+ST R6,contador1
 ADD R5,R5,#-1			
 BRz INTERCAMBIAR_IZQ
 JSR BORRAR
@@ -237,6 +261,12 @@ BRnzp ESPERALETRA
 
 ; movimiento hacia Abajo
 ABAJO
+LD R6,contador2
+ST R6,contador2
+ADD R6,R6,#-7
+BRz ESPERALETRA
+ADD R6,R6,#8
+ST R6,contador2
 ADD R5,R5,#-1
 BRz INTERCAMBIAR_ABAJO
 JSR BORRAR
@@ -248,6 +278,12 @@ BRnzp ESPERALETRA
 
 ; movimiento hacia Arriba
 ARRIBA
+LD R6,contador2
+ST R6,contador2
+ADD R6,R6,#0
+BRz ESPERALETRA
+ADD R6,R6,#-1
+ST R6,contador2
 ADD R5,R5,#-1
 BRz INTERCAMBIAR_ARRIBA
 JSR BORRAR
@@ -359,7 +395,7 @@ LD R4, salto_selec_neg
 ADD R2,R2,R4
 JSR SELECCION
 BRnzp ESPERALETRA
-
+candy .FILL #258
 ; Intercambio hacia Arriba (lo mismo que el de intercambio hacia abajo pero con otros valores de movimientos)
 INTERCAMBIAR_ARRIBA
 LD R5, saber_color        	 
@@ -410,17 +446,17 @@ JSR ENTER_SELECCION
 BRnzp ESPERALETRA
 BRzp CAMBIO_CARAMELO
 
-candy .FILL #258
 
 
-negro    	.FILL x0000
+
+
 
 linea       	.FILL #114  
 salto_selec	.FILL #1920
 salto_selec_neg	.FILL #-1920
 
 rojo_enter .FILL x7C00
-salto .FILL x710
+
 ancho_pantalla .FILL #128
 seleccion2gris .FILL #129
 start_seleccion .FILL xC100
@@ -449,6 +485,7 @@ SAVEEE_R5 	.BLKW 1
 SAVEEE_R6 	.BLKW 1
 SAVEEE_R2 	.BLKW 1
 SAVEEE_R7 	.BLKW 1
+negro2		.FILL x0000
 
 VERIFICAR_COLOR
 ST R4, SAVEEE_R4
@@ -494,7 +531,7 @@ ADD R5,R5,R4					; suma 1920 para bajar 1 caramelo
 VER_ABAJO1
 ADD R5,R5,R4					;suma otra vez 1920 para bajar otro caramelo
 
-LD R1, negro					;reseta R1 a x0000
+LD R1, negro2					;reseta R1 a x0000
 
 ADD R5,R5,R4					;baja al caramelo de abajo de la seleccion 
 LDR R3,R5,#0					;guarda en R3  el color del caramelo de abajo
@@ -528,7 +565,7 @@ LD R5, salto_selec_neg			; -1920
 LOOP_BORRAR_ARRIBA				;borra hacia arriba sobre el contador R3 
 ADD R3,R3,#-1					;le va restando 1 
 BRn BORRA_ABAJO					;si da negativo va a BORRAR_ABAJO
-LD R1,negro						;le da el COLOR negro a R0 
+LD R1,negro2						;le da el COLOR negro a R0 
 ADD R0,R2,#0					;en R0 guarda la posicion del primer pixel del caramelo
 JSR CREAR_CARAMELO				;crea caramelo con R0 (la posicion) y R1 (el color)
 ADD R2,R2,R5					;le suma a la posicion 1920 para subir 1 caramelo mas 
@@ -557,9 +594,9 @@ VER_DERECHA
 LD R2, GUARDAR_AUX_R2
 ST R2, GUARDAR_AUX_R2
 LD R5, saber_color				;389
-LD R0, negro					;reseta a x0000
-LD R1, negro					;reseta a x0000	
-LD R3, negro					;reseta a x0000
+LD R0, negro2					;reseta a x0000
+LD R1, negro2					;reseta a x0000	
+LD R3, negro2				;reseta a x0000
 
 ADD R5,R2,R5					;para saber color del mismo caramelo en donde esta 
 LD R6, GUARDAR_AUX_R6			
@@ -594,7 +631,7 @@ ADD R5, R5, #-16				;resta 16
 
 ADD R5, R5, #-16				;resta nuevamente 16 
 
-LD R1, negro					;R1 tiene el color negro 
+LD R1, negro2					;R1 tiene el color negro 
 	
 LDR R3,R5,#0					;guarda el color en R3 donde esta R5 (1 a la izquierda donde esta la seleccion)
 NOT R3,R3						;lo nega
@@ -627,7 +664,7 @@ ADD R3,R0,#0					;en R3 guarda el contador para la derecha
 ADD R4,R1,#0					;en R4 guarda el contador para la izquierda
 
 LOOP_BORRAR_IZQ					;borra hacia la izquierda
-LD R1,negro						;R1 tiene el color negro
+LD R1,negro2						;R1 tiene el color negro
 ADD R4,R4,#-1					;le resta 1 al contador R4
 BRn BORRAR_DERECHA				;si es negativo, va a BORRAR_DERECHA 
 ADD R0,R2,#0					;le da a R0 la posicion R2
