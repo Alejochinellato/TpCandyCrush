@@ -328,39 +328,39 @@ amarilloL .FILL x7FE0
 saltoL .FILL x710
 rojo_enter .FILL x7C00
 
-CREAR_ROJO
+CREAR_ROJO   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
 JSR CREAR_CARAMELO_ROJO
-LD R7,GUARDARR_R7
+LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
-CREAR_ROSA
+CREAR_ROSA   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
 JSR CREAR_CARAMELO_ROSA
-LD R7,GUARDARR_R7
+LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
-CREAR_AZUL
+CREAR_AZUL   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
 JSR CREAR_CARAMELO_AZUL
-LD R7,GUARDARR_R7
+LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
-CREAR_VERDE
+CREAR_VERDE ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
 JSR CREAR_CARAMELO_VERDE
-LD R7,GUARDARR_R7
+LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
-CREAR_AMA
+CREAR_AMA   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
 JSR CREAR_CARAMELO_AMAR
-LD R7,GUARDARR_R7
+LD R7,GUARDARR_R7 ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
 ; crear un caramelo
@@ -615,9 +615,9 @@ BRnzp ESPERALETRA
 INTERCAMBIAR_DER
 
 ADD R6,R6,#-1
-ST R6,contador1
+ST R6,contador1       ;contador para limites
 
-LD R6,CANT_MOV 
+LD R6,CANT_MOV       ;verifica cant de movimientos
 ADD R6, R6, #1
 ST R6, CANT_MOV
 
@@ -625,7 +625,7 @@ ADD R6 , R6, #-13
 BRzp gameover
 
 
-LD R5, saber_color        	; le da el valor 389 (128 + 128 + 128 + 5)
+LD R5, saber_color        	; le da el valor 903 para obtener el color del pixel del medio del caram 
 ADD R5,R2,R5            	; suma a la pocision 389 para saber el color del caramelo donde esta
 LDR R6,R5,#0            	; guarda el color en R6
 
@@ -661,9 +661,9 @@ BRnzp ESPERALETRA
 ; Intercambio hacia la Izquierda del caramelo (funciona igual que el derecho pero restando en las posiciones)
 INTERCAMBIAR_IZQ
 add R6,R6,#1
-ST R6,contador1
+ST R6,contador1   ; contador para limites
 
-LD R6,CANT_MOV 
+LD R6,CANT_MOV    ; verifica movimientos
 ADD R6,R6, #1
 ST R6, CANT_MOV
 
@@ -703,18 +703,17 @@ BRnzp ESPERALETRA
 ; Intercambio hacia Abajo del caramelo
 INTERCAMBIAR_ABAJO
 add R6,R6,#-1
-ST R6,contador2
+ST R6,contador2   ; contador para limites
 
-LD R6,CANT_MOV 
+LD R6,CANT_MOV    ; verifica movimientos
 ADD R6, R6, #1
 ST R6, CANT_MOV
 
 ADD R6, R6, #-13
 BRzp gameover
 
-
-LD R5, saber_color            	; le da el valor 389 (128 + 128 + 128 + 5) cambiado
-LD R7, saber_color_abajo    	; carga 2180 para saber el color de abajo (128 x 17 + 4) cambiado
+LD R5, saber_color            	; le da el valor 903 para obtener el color del pixel del medio del caram
+LD R7, saber_color_abajo       	; carga 2824 para poder ver el medio del pixel
 LD R3, salto_selec            	; carga el valor para el salto de seleccion hacia abajo (1920 = 128 x 15)
 
 ADD R5,R2,R5                	; guarda en R5 la pocision en el color del caramelo donde esta
@@ -750,12 +749,11 @@ candy .FILL #258
 ; Intercambio hacia Arriba (lo mismo que el de intercambio hacia abajo pero con otros valores de movimientos)
 INTERCAMBIAR_ARRIBA
 add R6,R6,#1
-ST R6,contador2
+ST R6,contador2    ;contador para limites
 
-LD R6,CANT_MOV 
+LD R6,CANT_MOV     ;verifica movimientos
 ADD R6,R6, #1
 ST R6, CANT_MOV
-
 ADD R6 ,R6, #-13
 BRzp gameover
 
@@ -798,7 +796,7 @@ BRnzp ESPERALETRA           	; espera otras entradas
 
 ;FIN DEL PROGRAMA
 gameover
-LEA		R0, GAMEOVER_STR
+LEA		R0, GAMEOVER_STR    ;Muestra en el simulador que termino el juego
 PUTS
 HALT
 
@@ -953,7 +951,7 @@ BRnzp LOOP_BORRAR_ABAJO        	;repite el loop
 VER_DERECHA
 LD R2, GUARDAR_AUX_R2
 ST R2, GUARDAR_AUX_R2
-LD R5, saber_color            	;389
+LD R5, saber_color            	; le da el valor 903 para obtener el color del pixel del medio del caram
 LD R0, negro2                	;reseta a x0000
 LD R1, negro2                	;reseta a x0000    
 LD R3, negro2            	;reseta a x0000
