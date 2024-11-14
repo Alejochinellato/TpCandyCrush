@@ -1,50 +1,314 @@
 .ORIG x3000	 
 
-	LD R0, start	; posicion inicial = xC181
-LD R3, dieciseis	; R3 = 16
-LD R4, ancho    	; R4 = 14 (ancho de una linea de caramelos)
+LD R0, startL	; posicion inicial = xC181
+LD R3, dieciseisL	; R3 = 16
+LD R4, anchoL; R4 = 14 (ancho de una linea de caramelos)
 ADD R4, R4, #-6 	; cantidad de filas (R4 = 8)
 
+
 LOOP_CANDY
-; bucle para crear caramelos de diferentes colores
+; Fila 1
+LD R1, rosaL     	; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
 
-LD R1, rojo        	;cargar el color rojo en R1
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROJO
-ADD R0, R0, R3    	;avanza la posicion 16 unidades
-LD R1, azul
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_AZUL
+LD R1, rojoL     	; Caramelo rojo
+JSR CREAR_ROJO
 ADD R0, R0, R3
-LD R1, verde
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_VERDE
-ADD R0, R0, R3
-LD R1, rosa
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROSA
-ADD R0, R0, R3
-LD R1, amarillo
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_AMAR
-ADD R0, R0, R3
-LD R1, rojo
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROJO
-ADD R0, R0, R3
-LD R1, verde
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_VERDE
-ADD R0, R0, R3
-LD R1, rosa
-JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROSA
 
+LD R1, azulL     	; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
 
-LD R2, salto     	; salto entre filas de caramelos
-ADD R0,R0,R2     	; mueve R0 a la siguiente fila de caramelos
-ADD R4,R4, #-1     	; decrementa el contador de filas (8)
-BRp LOOP_CANDY    	 
+LD R1, verdeL   	; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, rosaL     	; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, amarilloL 	; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rojoL     	; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, verdeL    	; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, rosaL     	; Caramelo rosa
+JSR CREAR_ROSA
+
+; Mover a la siguiente fila
+LD R2, saltoL
+ADD R0, R0, R2
+
+;Fila 2
+   	 
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+; Mover a la siguiente fila
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+; Mover a la siguiente fila
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 4
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+; Mover a la siguiente fila
+
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 5
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+; Mover a la siguiente fila
+
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 6
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 7
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, verdeL     ; Caramelo verde
+JSR CREAR_VERDE
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R2, saltoL
+ADD R0, R0, R2
+
+; Fila 8
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
+LD R1, rojoL      ; Caramelo rojo
+JSR CREAR_ROJO
+ADD R0, R0, R3
+
+LD R1, amarilloL  ; Caramelo amarillo
+JSR CREAR_AMA
+ADD R0, R0, R3
+
+LD R1, azulL      ; Caramelo azul
+JSR CREAR_AZUL
+ADD R0, R0, R3
+
+LD R1, rosaL      ; Caramelo rosa
+JSR CREAR_ROSA
+ADD R0, R0, R3
+
 
 LD R6,negro
 ST R6, contador1
@@ -52,6 +316,50 @@ ST R6, contador2
 
 BRnzp MAIN         	; finaliza el bucle y salta a MAIN
 
+startL     	.FILL xC181
+dieciseisL .FILL #16
+anchoL 	.FILL #14
+rojoL    	.FILL xF800
+verdeL     	.FILL x03E0
+azulL    	.FILL x001F
+rosaL	.FILL xF81F
+amarilloL .FILL x7FE0
+saltoL .FILL x710
+
+CREAR_ROJO
+ST R7,GUARDARR_R7
+JSR CREAR_CARAMELO
+JSR CREAR_CARAMELO_ROJO
+LD R7,GUARDARR_R7
+RET
+
+CREAR_ROSA
+ST R7,GUARDARR_R7
+JSR CREAR_CARAMELO
+JSR CREAR_CARAMELO_ROSA
+LD R7,GUARDARR_R7
+RET
+
+CREAR_AZUL
+ST R7,GUARDARR_R7
+JSR CREAR_CARAMELO
+JSR CREAR_CARAMELO_AZUL
+LD R7,GUARDARR_R7
+RET
+
+CREAR_VERDE
+ST R7,GUARDARR_R7
+JSR CREAR_CARAMELO
+JSR CREAR_CARAMELO_VERDE
+LD R7,GUARDARR_R7
+RET
+
+CREAR_AMA
+ST R7,GUARDARR_R7
+JSR CREAR_CARAMELO
+JSR CREAR_CARAMELO_AMAR
+LD R7,GUARDARR_R7
+RET
 
 ; crear un caramelo
 CREAR_CARAMELO
@@ -176,6 +484,7 @@ amarillo .FILL x7FE0
 SAVEE_R0 	.BLKW 1
 SAVEE_R2 	.BLKW 1
 SAVEE_R3 	.BLKW 1
+GUARDARR_R7  .BLKW 1
 E 	.BLKW 1    
 SAVEE_R5 	.BLKW 1   
 SAVEE_R6 	.BLKW 1      	 
@@ -368,12 +677,11 @@ ADD R2, R2, #1
 JSR SELECCION
 BRnzp ESPERALETRA
 
-
 ; Intercambio hacia Abajo del caramelo
 INTERCAMBIAR_ABAJO
-LD R5, saber_color            	; le da el valor 389 (128 + 128 + 128 + 5)
-LD R7, saber_color_abajo    	; carga 2180 para saber el color de abajo (128 x 17 + 4)
-LD R3, salto_selec            	; carga el valor para el salto de seleccion hacia abajo (1920 = 128 x 15)
+LD R5, saber_color            	; le da el valor 389 (128 + 128 + 128 + 5) cambiado 
+LD R7, saber_color_abajo    	; carga 2180 para saber el color de abajo (128 x 17 + 4) cambiado
+LD R3, salto_selec            	; carga el valor para el salto de seleccion hacia abajo (1920 = 128 x 15) 
 
 ADD R5,R2,R5                	; guarda en R5 la pocision en el color del caramelo donde esta
 LDR R6,R5,#0                	; guarda el color en R6
@@ -455,10 +763,6 @@ BRnzp ESPERALETRA
 BRzp CAMBIO_CARAMELO
 
 
-
-
-
-
 linea       	.FILL #114  
 salto_selec	.FILL #1920
 salto_selec_neg	.FILL #-1920
@@ -478,9 +782,9 @@ letraSpos .FILL #115
 letraWneg .FILL #-119
 letraWpos .FILL #119
 teclaENTneg .FILL #-10
-saber_color .FILL #389
-saber_color_abajo .FILL #2180
-saber_color_arriba .FILL #-509
+saber_color .FILL #903
+saber_color_abajo .FILL #2824
+saber_color_arriba .FILL #-888
 
 WAITKB .FILL xFE00
 GUARDAR_AUX_R2 	.BLKW 1
@@ -1673,6 +1977,10 @@ ancho6     	.FILL #14
 linea7      	.FILL #114  
 candy6 .FILL #258
 amarillo2	.FILL x7FE0
+
+
+
+
 
 
 
