@@ -1,5 +1,5 @@
 # candycrush
-El juego Candy Crush consiste en combinar al menos tres caramelos del mismo tipo en una fila horizontal o vertical para eliminarlos del tablero. Cuando se eliminan los caramelos, otros caramelos caen desde la parte superior para llenar los espacios vacíos.
+El juego Candy Crush consiste en combinar al menos tres caramelos del mismo tipo en una fila horizontal o vertical para eliminarlos del tablero. Cuando se eliminan los caramelos, otros caramelos caen desde la parte superior para llenar los espacios vacíos. El juego terminara cuando el jugador haga una cierta cantidad de movimientos.
 
 El control de desplazamineto seria a traves del uso del wasd del teclado y al querer mover de lugar una caramelo, se presionaria enter y luego la direccion nuevamente para el lado que se quisiera mover el mismo. Si se quiere volver a la mecanica normal de seleccionado, se debera presionar enter nuevamente.
 
