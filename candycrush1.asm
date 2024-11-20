@@ -345,7 +345,7 @@ RET
 CREAR_AZUL   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR 
+JSR CREAR_CARAMELO_AZUL1
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
@@ -359,7 +359,7 @@ RET
 CREAR_AMA   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_AMAR
+JSR CREAR_CARAMELO_AMA1
 LD R7,GUARDARR_R7 ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
@@ -474,7 +474,7 @@ RET
 
 
 start     	.FILL xC181
-
+start_seleccion .FILL xC100
 ancho 	.FILL #14 	 
 rojo    	.FILL xF800
 verde     	.FILL x03E0
@@ -499,6 +499,17 @@ salto       .FILL x710
 linea2       	.FILL #114  
 ancho_pantalla .FILL #128
 dieciseis .FILL #16
+TECLADO .FILL xFE02
+letraDneg .FILL #-100
+letraDpos .FILL #100
+letraAneg .FILL #-97
+letraApos .FILL #97
+letraSneg .FILL #-115
+letraSpos .FILL #115
+letraWneg .FILL #-119
+letraWpos .FILL #119
+teclaENTneg .FILL #-10
+
 ; seccion principal del programa
 MAIN
 
@@ -789,17 +800,17 @@ LDR R6,R5,#0                	; guarda el color en R6
 ADD R5,R5,R7                	; mueve hacia abajo R5 para saber el color del caramelo de abajo
 LDR R5,R5,#0                	; guarda el color en R5
 
-LD R0,negro                    	; le da valor x0000 a R0
+LD R0,negro2                    	; le da valor x0000 a R0
 LD R4, seleccion2gris        	; carga 129 (128 + 1)
 ADD R0,R4,R2                	; guarda en R0 la posicion R2 mas R4
 
-LD R1,negro                    	; le da valor x0000 a R0
+LD R1,negro2                    	; le da valor x0000 a R0
 ADD R1,R1,R5                	; le da a R1 el color del caramelo de abajo
 
 JSR CREAR_CARAMELO            	; llama a crear caramelo con el nuevo color que estaba abajo y lo vuelve a pintar
 
 ADD R0,R0,R3                	; ajusta la seleccion, R3 = (1920 = 128 x 15)
-LD R1,negro                    	; le da valor x0000 a R1
+LD R1,negro2                    	; le da valor x0000 a R1
 ADD R1,R1,R6                	; le da a R1 el color que estaba en la anterior posicion
 
 JSR CREAR_CARAMELO            	; espera otras entradas
@@ -834,18 +845,18 @@ LDR R6, R5, #0
     
 ADD R5, R2, R7          	 
 LDR R5, R5, #0         	 
-LD R0, negro     	 
+LD R0, negro2     	 
     
 LD R4, seleccion2gris     	 
 ADD R0, R4, R2            	 
 
-LD R1, negro               	 
+LD R1, negro2               	 
 ADD R1, R1, R5            	 
 
 JSR CREAR_CARAMELO         	 
 
 ADD R0, R0, R3            	 
-LD R1, negro              	 
+LD R1, negro2              	 
 ADD R1, R1, R6             	 
 
 JSR CREAR_CARAMELO  	 
@@ -859,6 +870,11 @@ ADD R2,R2,R4
 JSR SELECCION              	 
 BRnzp ESPERALETRA           	; espera otras entradas
 
+ESPERALETRA1
+ST R7 , SAVEE_R7y  
+JSR ESPERALETRA
+LD R7 , SAVEE_R7y  
+RET
 
 
 ;FIN DEL PROGRAMA
@@ -867,19 +883,21 @@ LEA		R0, GAMEOVER_STR    ;Muestra en el simulador que termino el juego
 PUTS
 HALT
 
-
+dieciseisR .FILL #16
+SAVEE_R5y 	.BLKW 1 
+SAVEE_R7y 	.BLKW 1 
 
 CAMBIO_CARAMELO
 ADD R5,R5,#-1
 BRnp seguir                    	;mientras sea positivo o 0
 JSR SELECCION
-BRnzp ESPERALETRA
+BRnzp ESPERALETRA1
 seguir
-LD R5, dieciseis
+LD R5, dieciseisR
 ADD R5,R5,#-15                	;para q la flag valga 1
-ST R5,SAVEE_R5
+ST R5,SAVEE_R5y
 JSR ENTER_SELECCION
-BRnzp ESPERALETRA
+BRnzp ESPERALETRA1
 BRzp CAMBIO_CARAMELO
 
 
@@ -890,17 +908,6 @@ GAMEOVER_STR	.STRINGZ "GAMEOVER"
 
 
 seleccion2gris .FILL #129
-start_seleccion .FILL xC100
-TECLADO .FILL xFE02
-letraDneg .FILL #-100
-letraDpos .FILL #100
-letraAneg .FILL #-97
-letraApos .FILL #97
-letraSneg .FILL #-115
-letraSpos .FILL #115
-letraWneg .FILL #-119
-letraWpos .FILL #119
-teclaENTneg .FILL #-10
 saber_color .FILL #903
 saber_color_abajo .FILL #2824
 saber_color_arriba .FILL #-888
@@ -1136,7 +1143,13 @@ SAVEEE_R6 	.BLKW 1
 SAVEEE_R2 	.BLKW 1
 SAVEEE_R7 	.BLKW 1
 
+CREAR_CARAMELO_AZUL1
+JSR CREAR_CARAMELO_AZUL
+RET
 
+CREAR_CARAMELO_AMA1
+JSR CREAR_CARAMELO_AMAR
+RET
 
 CREAR_CARAMELO_VERDE
 ST R4, SAVEEE_R4
