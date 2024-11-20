@@ -327,7 +327,7 @@ rosaL	.FILL xF81F
 amarilloL .FILL x7FE0
 saltoL .FILL x710
 rojo_enter .FILL x7C00
-
+WAITKB .FILL    xFE00
 CREAR_ROJO   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
@@ -345,7 +345,7 @@ RET
 CREAR_AZUL   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_AZUL
+JSR 
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
@@ -471,8 +471,10 @@ LD R7,SAVEE_R7
 
 RET
 
+
+
 start     	.FILL xC181
-dieciseis .FILL #16
+
 ancho 	.FILL #14 	 
 rojo    	.FILL xF800
 verde     	.FILL x03E0
@@ -496,7 +498,7 @@ CANT_MOV   .BLKW 1
 salto       .FILL x710
 linea2       	.FILL #114  
 ancho_pantalla .FILL #128
-
+dieciseis .FILL #16
 ; seccion principal del programa
 MAIN
 
@@ -542,6 +544,7 @@ ADD R4 ,R4, R3
 BRz CAMBIO_CARAMELO
 
 BRnzp ESPERALETRA        	; si no hay teclas validas, vuelve a esperar
+candy .FILL #258
 
 ; movimiento a la Derecha
 DERECHA    
@@ -631,15 +634,46 @@ LDR R6,R5,#0            	; guarda el color en R6
 
 ADD R5,R5,#15            	; mueve a la derecha 15 lugares R5
 LDR R5,R5,#0            	; carga el color en R5 del caramelo de la derecha
-
+;rojo verde azul rosa amarillo
 LD R0,negro                	; le da valor x0000 a R0
 LD R4, seleccion2gris    	; carga 129 (128 + 1)
 ADD R0,R4,R2            	; guarda en R0 la posicion R2 mas R4 (donde empieza el caramelo)
 
 LD R1,negro                	; le da valor x0000 a R1
 ADD R1,R1,R5            	; le da a R1 el color del caramelo de la derecha
-
-JSR CREAR_CARAMELO        	; llama a crear caramelo con el nuevo color que estaba en la derecha y lo vuelve a pintar
+NOT R1,R1
+ADD R1,R1,#1
+LD R3,rojo
+ADD R4,R3,R1
+BRz ROJO
+LD R3,verde
+ADD R4,R3,R1
+BRz VERDE
+LD R3,azul
+ADD R4,R3,R1
+BRz AZUL
+LD R3,rosa
+ADD R4,R3,R1
+BRz ROSA
+LD R3,amarillo
+ADD R4,R3,R1
+BRz AMARILLO
+ROJO
+JSR CREAR_CARAMELO_ROJO
+BRnzp LISTO
+VERDE
+JSR CREAR_CARAMELO_VERDE
+BRnzp LISTO
+AZUL
+JSR CREAR_CARAMELO_AZUL
+BRnzp LISTO
+ROSA
+JSR CREAR_CARAMELO_ROSA
+BRnzp LISTO
+AMARILLO
+JSR CREAR_CARAMELO_AMAR
+LISTO
+;JSR CREAR_CARAMELO        	; llama a crear caramelo con el nuevo color que estaba en la derecha y lo vuelve a pintar
 
 ADD R0,R0,#15
 ADD R0,R0,#1            	; le suma 16 a la posicion
@@ -647,7 +681,40 @@ ADD R0,R0,#1            	; le suma 16 a la posicion
 LD R1,negro                	; le da valor x0000 a R1
 
 ADD R1,R1,R6            	; le da a R1 el color del caramelo que habia en donde se estaba antes
+NOT R1,R1
+ADD R1,R1,#1
+LD R3,rojo
+ADD R4,R3,R1
+BRz ROJO1
+LD R3,verde
+ADD R4,R3,R1
+BRz VERDE1
+LD R3,azul
+ADD R4,R3,R1
+BRz AZUL1
+LD R3,rosa
+ADD R4,R3,R1
+BRz ROSA1
+LD R3,amarillo
+ADD R4,R3,R1
+BRz AMARILLO1
+ROJO1
+JSR CREAR_CARAMELO_ROJO
+BRnzp LISTO1
+VERDE1
+JSR CREAR_CARAMELO_VERDE
+BRnzp LISTO1
+AZUL1
+JSR CREAR_CARAMELO_AZUL
+BRnzp LISTO1
+ROSA1
+JSR CREAR_CARAMELO_ROSA
+BRnzp LISTO1
+AMARILLO1
+JSR CREAR_CARAMELO_AMAR
+LISTO1
 JSR CREAR_CARAMELO        	; llama a crear caramelo con el nuevo color que estaba en la posiciopn anterior y lo vuelve a pintar en la derecha
+
 JSR VERIFICAR_COLOR
 ADD R2, R2, #15
 ADD R2, R2, #1
@@ -744,7 +811,7 @@ LD R4, salto_selec_neg
 ADD R2,R2,R4
 JSR SELECCION
 BRnzp ESPERALETRA
-candy .FILL #258
+
 
 ; Intercambio hacia Arriba (lo mismo que el de intercambio hacia abajo pero con otros valores de movimientos)
 INTERCAMBIAR_ARRIBA
@@ -838,7 +905,7 @@ saber_color .FILL #903
 saber_color_abajo .FILL #2824
 saber_color_arriba .FILL #-888
 
-WAITKB .FILL    xFE00
+
 GUARDAR_AUX_R2 	.BLKW 1
 GUARDAR_AUX_R6 	.BLKW 1
 SAVEE_R1 	    .BLKW 1
@@ -1068,6 +1135,7 @@ SAVEEE_R5 	.BLKW 1
 SAVEEE_R6 	.BLKW 1
 SAVEEE_R2 	.BLKW 1
 SAVEEE_R7 	.BLKW 1
+
 
 
 CREAR_CARAMELO_VERDE
