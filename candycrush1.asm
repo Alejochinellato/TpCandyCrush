@@ -1,4 +1,4 @@
-.ORIG x3000	 
+ .ORIG x3000	 
 
 LD R0, startL	; posicion inicial = xC181
 LD R3, dieciseisL	; R3 = 16
@@ -327,39 +327,39 @@ rosaL	.FILL xF81F
 amarilloL .FILL x7FE0
 saltoL .FILL x710
 rojo_enter .FILL x7C00
-WAITKB .FILL    xFE00
+WAITKB .FILL	xFE00
 CREAR_ROJO   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROJO
+JSR CREAR_CARAMELO_ROJO1
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
 CREAR_ROSA   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_ROSA
+JSR CREAR_CARAMELO_ROSA1
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
 CREAR_AZUL   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR 
+JSR CREAR_CARAMELO_AZUL1
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
 CREAR_VERDE ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_VERDE
+JSR CREAR_CARAMELO_VER1
 LD R7,GUARDARR_R7   ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
 CREAR_AMA   ; funcion auxiliar que llama a crear caramelo y crear caram color
 ST R7,GUARDARR_R7
 JSR CREAR_CARAMELO
-JSR CREAR_CARAMELO_AMAR
+JSR CREAR_CARAMELO_AMAR1
 LD R7,GUARDARR_R7 ;guarda en r7 el valor que estaba en loop candy para que vuelva al mimo loop candy con r7
 RET
 
@@ -489,13 +489,13 @@ SAVEE_R2 	.BLKW 1
 SAVEE_R3 	.BLKW 1
 GUARDARR_R7  .BLKW 1
 E 	.BLKW 1    
-SAVEE_R5 	.BLKW 1   
+ 
 SAVEE_R6 	.BLKW 1      	 
 SAVEE_R7 	.BLKW 1
 contador1 	.BLKW 1
 contador2 	.BLKW 1
 CANT_MOV   .BLKW 1
-salto       .FILL x710
+salto   	.FILL x710
 linea2       	.FILL #114  
 ancho_pantalla .FILL #128
 dieciseis .FILL #16
@@ -562,8 +562,17 @@ ADD R2,R2,#1        	; mueve 16 lugares la posicion
 JSR SELECCION        	; llama a SELECCION para actualizar la seleccion en la nueva posicion (16 lugares a la derecha)
 BRnzp ESPERALETRA    	; salta a ESPERALETRA para esperar la proxima entrada
 
+TECLADO .FILL xFE02
+letraDneg .FILL #-100
+letraDpos .FILL #100
+letraAneg .FILL #-97
+letraApos .FILL #97
+letraSneg .FILL #-115
+letraSpos .FILL #115
+letraWneg .FILL #-119
+letraWpos .FILL #119
 
-
+teclaENTneg .FILL #-10
 ; movimiento a la Izquierda (que funciona igual que derecha pero resta 16 a la pocision)
 IZQUIERDA
 LD R6,contador1
@@ -612,15 +621,16 @@ LD R4, salto_selec_neg	; le da el valor -1920
 ADD R2,R2,R4        	; suma a la pocision -1920 (para subir 15 pixeles)
 JSR SELECCION
 BRnzp ESPERALETRA
+SAVEE_R5 	.BLKW 1
 
 
 ; intercambio hacia la Derecha del caramelo
 INTERCAMBIAR_DER
 
 ADD R6,R6,#-1
-ST R6,contador1       ;contador para limites
+ST R6,contador1   	;contador para limites
 
-LD R6,CANT_MOV       ;verifica cant de movimientos
+LD R6,CANT_MOV   	;verifica cant de movimientos
 ADD R6, R6, #1
 ST R6, CANT_MOV
 
@@ -628,7 +638,7 @@ ADD R6 , R6, #-13
 BRzp gameover
 
 
-LD R5, saber_color        	; le da el valor 903 para obtener el color del pixel del medio del caram 
+LD R5, saber_color        	; le da el valor 903 para obtener el color del pixel del medio del caram
 ADD R5,R2,R5            	; suma a la pocision 389 para saber el color del caramelo donde esta
 LDR R6,R5,#0            	; guarda el color en R6
 
@@ -724,13 +734,13 @@ ADD R2, R2, #-16
 JSR SELECCION
 BRnzp ESPERALETRA
 
-
+start_seleccion .FILL xC100
 ; Intercambio hacia la Izquierda del caramelo (funciona igual que el derecho pero restando en las posiciones)
 INTERCAMBIAR_IZQ
 add R6,R6,#1
 ST R6,contador1   ; contador para limites
 
-LD R6,CANT_MOV    ; verifica movimientos
+LD R6,CANT_MOV	; verifica movimientos
 ADD R6,R6, #1
 ST R6, CANT_MOV
 
@@ -750,79 +760,14 @@ ADD R0,R4,R2
 
 LD R1,negro
 ADD R1,R1,R5
-NOT R1,R1
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO
-ROJO
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO
-VERDE
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO
-AZUL
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO
-ROSA
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO
-AMARILLO
-JSR CREAR_CARAMELO_AMAR
-LISTO
-;JSR CREAR_CARAMELO
+
+JSR CREAR_CARAMELO
 
 ADD R0,R0,#-16            	; le resta 16 a la posicion
 LD R1,negro
-
 ADD R1,R1,R6
-ADD R1,R1,R6            	; le da a R1 el color del caramelo que habia en donde se estaba antes
-NOT R1,R1
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO1
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE1
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL1
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA1
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO1
-ROJO1
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO1
-VERDE1
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO1
-AZUL1
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO1
-ROSA1
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO1
-AMARILLO1
-JSR CREAR_CARAMELO_AMAR
-LISTO1
-JSR CREAR_CARAMELO
 
+JSR CREAR_CARAMELO
 JSR VERIFICAR_COLOR
 ADD R2, R2, #-16
 
@@ -837,7 +782,7 @@ INTERCAMBIAR_ABAJO
 add R6,R6,#-1
 ST R6,contador2   ; contador para limites
 
-LD R6,CANT_MOV    ; verifica movimientos
+LD R6,CANT_MOV	; verifica movimientos
 ADD R6, R6, #1
 ST R6, CANT_MOV
 
@@ -860,81 +805,17 @@ ADD R0,R4,R2                	; guarda en R0 la posicion R2 mas R4
 
 LD R1,negro                    	; le da valor x0000 a R0
 ADD R1,R1,R5                	; le da a R1 el color del caramelo de abajo
-NOT R1,R1
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO
-ROJO
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO
-VERDE
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO
-AZUL
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO
-ROSA
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO
-AMARILLO
-JSR CREAR_CARAMELO_AMAR
-LISTO
-;JSR CREAR_CARAMELO
+
+JSR CREAR_CARAMELO            	; llama a crear caramelo con el nuevo color que estaba abajo y lo vuelve a pintar
 
 ADD R0,R0,R3                	; ajusta la seleccion, R3 = (1920 = 128 x 15)
-LD R1,negro   
-                 	; le da valor x0000 a R1
-ADD R1,R1,R6                	; le da a R1 el color que estaba en la anterior posicion            	
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO1
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE1
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL1
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA1
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO1
-ROJO1
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO1
-VERDE1
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO1
-AZUL1
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO1
-ROSA1
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO1
-AMARILLO1
-JSR CREAR_CARAMELO_AMAR
-LISTO1
+LD R1,negro                    	; le da valor x0000 a R1
+ADD R1,R1,R6                	; le da a R1 el color que estaba en la anterior posicion
 
 JSR CREAR_CARAMELO            	; espera otras entradas
-
 JSR VERIFICAR_COLOR
-ADD R2, R2, R3
 
+ADD R2, R2, R3
 JSR VERIFICAR_COLOR
 LD R4, salto_selec_neg
 ADD R2,R2,R4
@@ -945,9 +826,9 @@ BRnzp ESPERALETRA
 ; Intercambio hacia Arriba (lo mismo que el de intercambio hacia abajo pero con otros valores de movimientos)
 INTERCAMBIAR_ARRIBA
 add R6,R6,#1
-ST R6,contador2    ;contador para limites
+ST R6,contador2	;contador para limites
 
-LD R6,CANT_MOV     ;verifica movimientos
+LD R6,CANT_MOV 	;verifica movimientos
 ADD R6,R6, #1
 ST R6, CANT_MOV
 ADD R6 ,R6, #-13
@@ -963,82 +844,19 @@ LDR R6, R5, #0
     
 ADD R5, R2, R7          	 
 LDR R5, R5, #0         	 
-LD R0, negro     	 
+LD R0, negro2     	 
     
 LD R4, seleccion2gris     	 
 ADD R0, R4, R2            	 
 
-LD R1, negro               	 
+LD R1, negro2               	 
 ADD R1, R1, R5            	 
-NOT R1,R1
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO
-ROJO
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO
-VERDE
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO
-AZUL
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO
-ROSA
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO
-AMARILLO
-JSR CREAR_CARAMELO_AMAR
-LISTO
-;JSR CREAR_CARAMELO
+
 JSR CREAR_CARAMELO         	 
 
 ADD R0, R0, R3            	 
-LD R1, negro              	 
-ADD R1,R1,R6                	; le da a R1 el color que estaba en la anterior posicion            	
-ADD R1,R1,#1
-LD R3,rojo
-ADD R4,R3,R1
-BRz ROJO1
-LD R3,verde
-ADD R4,R3,R1
-BRz VERDE1
-LD R3,azul
-ADD R4,R3,R1
-BRz AZUL1
-LD R3,rosa
-ADD R4,R3,R1
-BRz ROSA1
-LD R3,amarillo
-ADD R4,R3,R1
-BRz AMARILLO1
-ROJO1
-JSR CREAR_CARAMELO_ROJO
-BRnzp LISTO1
-VERDE1
-JSR CREAR_CARAMELO_VERDE
-BRnzp LISTO1
-AZUL1
-JSR CREAR_CARAMELO_AZUL
-BRnzp LISTO1
-ROSA1
-JSR CREAR_CARAMELO_ROSA
-BRnzp LISTO1
-AMARILLO1
-JSR CREAR_CARAMELO_AMAR
-LISTO1            	 
+LD R1, negro2              	 
+ADD R1, R1, R6             	 
 
 JSR CREAR_CARAMELO  	 
 JSR VERIFICAR_COLOR
@@ -1049,29 +867,29 @@ LD R4, salto_selec
 ADD R2,R2,R4
   	 
 JSR SELECCION              	 
-BRnzp ESPERALETRA           	; espera otras entradas
+JSR ESPERALETRA           	; espera otras entradas
 
 
 
 ;FIN DEL PROGRAMA
 gameover
-LEA		R0, GAMEOVER_STR    ;Muestra en el simulador que termino el juego
+LEA    	R0, GAMEOVER_STR	;Muestra en el simulador que termino el juego
 PUTS
 HALT
-
+dieciseis3 .FILL #16
 
 
 CAMBIO_CARAMELO
 ADD R5,R5,#-1
 BRnp seguir                    	;mientras sea positivo o 0
 JSR SELECCION
-BRnzp ESPERALETRA
+JSR ESPERALETRA
 seguir
-LD R5, dieciseis
+LD R5, dieciseis3
 ADD R5,R5,#-15                	;para q la flag valga 1
 ST R5,SAVEE_R5
 JSR ENTER_SELECCION
-BRnzp ESPERALETRA
+JSR ESPERALETRA
 BRzp CAMBIO_CARAMELO
 
 
@@ -1082,17 +900,8 @@ GAMEOVER_STR	.STRINGZ "GAMEOVER"
 
 
 seleccion2gris .FILL #129
-start_seleccion .FILL xC100
-TECLADO .FILL xFE02
-letraDneg .FILL #-100
-letraDpos .FILL #100
-letraAneg .FILL #-97
-letraApos .FILL #97
-letraSneg .FILL #-115
-letraSpos .FILL #115
-letraWneg .FILL #-119
-letraWpos .FILL #119
-teclaENTneg .FILL #-10
+
+
 saber_color .FILL #903
 saber_color_abajo .FILL #2824
 saber_color_arriba .FILL #-888
@@ -1100,9 +909,9 @@ saber_color_arriba .FILL #-888
 
 GUARDAR_AUX_R2 	.BLKW 1
 GUARDAR_AUX_R6 	.BLKW 1
-SAVEE_R1 	    .BLKW 1
+SAVEE_R1     	.BLKW 1
 
-negro2    	    .FILL x0000
+negro2        	.FILL x0000
 
 VERIFICAR_COLOR
 ST R4, SAVEEE_R4
@@ -1318,6 +1127,36 @@ LD R2, SAVEEE_R2
 LD R1, SAVEE_R1
 LD R7, SAVEEE_R7
 
+RET
+
+CREAR_CARAMELO_AZUL1
+ST R7,SAVEEE_R7
+JSR CREAR_CARAMELO_AZUL
+LD R7,SAVEEE_R7
+RET
+
+CREAR_CARAMELO_AMAR1
+ST R7,SAVEEE_R7
+JSR CREAR_CARAMELO_AMAR
+LD R7,SAVEEE_R7
+RET
+
+CREAR_CARAMELO_ROJO1
+ST R7,SAVEEE_R7
+JSR CREAR_CARAMELO_ROJO
+LD R7,SAVEEE_R7
+RET
+
+CREAR_CARAMELO_ROSA1
+ST R7,SAVEEE_R7
+JSR CREAR_CARAMELO_ROSA
+LD R7,SAVEEE_R7
+RET
+
+CREAR_CARAMELO_VER1
+ST R7,SAVEEE_R7
+JSR CREAR_CARAMELO_VERDE
+LD R7,SAVEEE_R7
 RET
 
 SAVEEE_R4 	.BLKW 1
@@ -2289,3 +2128,4 @@ ancho6     	.FILL #14
 linea7      	.FILL #114  
 candy6 .FILL #258
 amarillo2	.FILL x7FE0
+
